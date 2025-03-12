@@ -1,5 +1,7 @@
 package org.example.SimulateAis.controllers;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.example.SimulateAis.models.CardAccount;
 import org.example.SimulateAis.models.CardAccountResponse;
 import org.example.SimulateAis.models.Consent;
@@ -26,6 +28,8 @@ public class RestApiController {
 
     @Autowired
     private ConsentStatusChanger consentStatusChanger;
+
+    private static final Logger LOG = LogManager.getLogger(RestApiController.class);
 
     @PostMapping("/api/insertTestData")
     public void insertSomeAccountData() {
@@ -97,6 +101,7 @@ public class RestApiController {
         if (consentStatusIsValid(consentId)){
             CardAccount cardAccount = simpleInMemoryStorage.getAccountResponse(consentId).getCardAccount();
             if(cardAccount == null){
+                LOG.info("Card account is null");
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
             } else {
                 return ResponseEntity.ok(cardAccount);
@@ -128,6 +133,7 @@ public class RestApiController {
     private boolean consentStatusIsValid(String consentId) {
         Consent consent = simpleInMemoryStorage.getConsent(consentId);
         if (consent == null) {
+            LOG.info("Consent is null");
             return false;
         } else {
             return consent.getConsentStatus().getConsent_status().equals(ConsentStatus.Statuses.valid);
