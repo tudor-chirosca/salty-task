@@ -1,7 +1,10 @@
 package org.example.SimulateAis.models;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 public class ConsentStatus {
 
+    @JsonProperty("consentStatus")
     public Statuses consent_status = Statuses.received;
 
     public enum Statuses{
